@@ -1,11 +1,15 @@
 {
-  "name": "llmprefs",
+  "name": "artificial-advice",
   "version": "0.1.0",
   "type": "module",
+  "workspaces": ["site"],
   "scripts": {
     "dev": "mastra dev",
     "build": "mastra build",
-    "cli": "node --import tsx/esm src/cli.ts"
+    "cli": "node --env-file=.env --import tsx/esm src/cli.ts",
+    "site:dev": "npm run dev --workspace=site",
+    "site:build": "npm run build --workspace=site",
+    "site:preview": "npm run preview --workspace=site"
   },
   "devDependencies": {
     "@types/node": "^25.3.2",
@@ -15,6 +19,8 @@
   },
   "dependencies": {
     "@mastra/core": "^1.8.0",
+    "@openrouter/ai-sdk-provider": "^2.2.3",
+    "ai": "^6.0.104",
     "zod": "^4.3.6"
   }
 }
