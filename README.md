@@ -38,10 +38,10 @@ This runs every question against every model in `src/models.ts`, writing results
 
 ### Single question evaluation
 
-The benchmark runs the `preference` workflow directly. To run a single question against a specific model, you can invoke the workflow via the CLI:
+Run a single question by passing its ID:
 
 ```bash
-npm run cli run preference '{"prompts":["Should I get a cat or a dog?"],"normalizationPrompt":"Reply with exactly one word: cat or dog."}'
+npm run cli run preference dinner-with-anyone
 ```
 
 Or use the Mastra dev server UI to run individual workflow invocations:

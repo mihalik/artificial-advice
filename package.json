@@ -2,20 +2,24 @@
   "name": "artificial-advice",
   "version": "0.1.0",
   "type": "module",
-  "workspaces": ["site"],
+  "workspaces": [
+    "site"
+  ],
   "scripts": {
     "dev": "mastra dev",
     "build": "mastra build",
     "cli": "node --env-file=.env --import tsx/esm src/cli.ts",
     "site:dev": "npm run dev --workspace=site",
     "site:build": "npm run build --workspace=site",
-    "site:preview": "npm run preview --workspace=site"
+    "site:preview": "npm run preview --workspace=site",
+    "deploy": "npm run site:build && wrangler pages deploy"
   },
   "devDependencies": {
     "@types/node": "^25.3.2",
     "mastra": "^1.3.5",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "wrangler": "^4.69.0"
   },
   "dependencies": {
     "@mastra/core": "^1.8.0",

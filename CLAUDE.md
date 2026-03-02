@@ -73,6 +73,16 @@ Uncomment or add an entry in the `registry` array in `src/models.ts`. All models
 }
 ```
 
+## Tone & framing
+
+The site aims to be **scientific and empirical**, not controversial or opinionated. Keep this in mind when writing copy, questions, or methodology notes:
+
+- Describe observations neutrally: "tends to suggest X" not "always pushes X" or "is biased toward X"
+- Avoid framing model behavior as correct or incorrect — refusals, hedges, and direct answers are all valid data points
+- Choose questions for their measurability and variety, not for controversy
+- Don't editorialize in results or methodology text; let the data speak
+- The goal is to surface patterns, not to judge or rank model behavior
+
 ## Mastra notes
 
 - Use the `mastra` skill for current API docs before modifying workflows or agents

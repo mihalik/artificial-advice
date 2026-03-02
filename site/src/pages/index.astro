@@ -1,0 +1,95 @@
+---
+import Base from '../layouts/Base.astro';
+import { readFileSync, readdirSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import { computeStats } from '../lib/stats';
+
+interface QuestionResult {
+  id: string;
+  prompts: string[];
+  displayQuestion?: string;
+  results: Array<{
+    model: string;
+    answers: Array<{ value: string; percent: number }>;
+  }>;
+}
+
+const resultsDir = join(dirname(fileURLToPath(import.meta.url)), '../../../results');
+const questions: QuestionResult[] = readdirSync(resultsDir)
+  .filter((f) => f.endsWith('.json'))
+  .map((f) => JSON.parse(readFileSync(join(resultsDir, f), 'utf8')))
+  .sort((a, b) => a.id.localeCompare(b.id));
+---
+
+<Base title="Artificial Advice">
+  <p class="text-gray-600 mb-8 max-w-2xl">When asked the same advice question repeatedly, language models show measurable tendencies — leaning toward specific answers rather than always hedging. This site tracks those patterns across models and questions.</p>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {questions.map((q) => {
+      const stats = computeStats(q.results);
+      const MUTED = ['hedge', 'refusal', 'other'];
+      const realAnswers = stats?.macroAnswers.filter((a) => !MUTED.includes(a.value)) ?? [];
+      const top = realAnswers[0];
+      const pct = top?.percent ?? 0;
+      const colors = pct >= 70
+        ? { badge: 'bg-green-100 text-green-800', bar: '#86efac', border: 'border-green-400' }
+        : pct >= 50
+        ? { badge: 'bg-indigo-100 text-indigo-800', bar: '#a5b4fc', border: 'border-indigo-400' }
+        : { badge: 'bg-amber-100 text-amber-800', bar: '#fcd34d', border: 'border-amber-400' };
+      // Bar colors: [0]=top accent, [1]=runner-up rose, [2+]=muted cycling, muted answers=light gray
+      const runnerUpColor = '#c4b5fd'; // violet-300
+      const cycleColors = ['#a78bfa', '#bfdbfe', '#fbcfe8'];
+      const mutedColor = '#e5e7eb'; // gray-200
+      return (
+        <a
+          href={`/${q.id}`}
+          class={`block bg-white border border-gray-200 border-l-4 ${colors.border} rounded-lg p-5 hover:shadow-sm transition`}
+        >
+          <p class="font-medium text-gray-900 mb-3">{q.displayQuestion ?? q.prompts[0]}</p>
+          {stats && top ? (
+            <div class="bg-gray-50 border border-gray-100 rounded-md p-3">
+              <div class="flex items-center gap-2 mb-2 flex-wrap">
+                <span class={`${colors.badge} text-xs font-semibold px-2 py-0.5 rounded-full`}>
+                  {top.value}
+                </span>
+                <span class="text-sm text-gray-600">{top.percent}%</span>
+                {realAnswers[1] && (
+                  <>
+                    <span class="text-xs text-gray-400">vs</span>
+                    <span class="bg-violet-100 text-violet-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+                      {realAnswers[1].value}
+                    </span>
+                    <span class="text-sm text-gray-500">{realAnswers[1].percent}%</span>
+                  </>
+                )}
+              </div>
+              <div class="flex h-2 rounded-full overflow-hidden gap-px mb-2">
+                {stats.macroAnswers
+                  .filter((a) => a.percent >= 5)
+                  .map((a) => {
+                    const realIdx = realAnswers.findIndex((r) => r.value === a.value);
+                    const bg = MUTED.includes(a.value)
+                      ? mutedColor
+                      : realIdx === 0
+                      ? colors.bar
+                      : realIdx === 1
+                      ? runnerUpColor
+                      : cycleColors[(realIdx - 2) % cycleColors.length];
+                    return <div style={`width:${a.percent}%;background:${bg}`} />;
+                  })}
+              </div>
+              <p class="text-xs text-gray-500">{stats.agreeing} of {stats.total} model{stats.total !== 1 ? 's' : ''} agree</p>
+            </div>
+          ) : (
+            <p class="text-sm text-gray-500">{q.results.length} model{q.results.length !== 1 ? 's' : ''}</p>
+          )}
+        </a>
+      );
+    })}
+  </div>
+
+  {questions.length === 0 && (
+    <p class="text-gray-500">No results yet. Run <code class="bg-gray-100 px-1 rounded">npm run cli run</code> to generate results.</p>
+  )}
+</Base>
