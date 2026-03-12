@@ -1,4 +1,4 @@
-# artificial-advice
+# AI Alignment Report
 
 A benchmark tool that probes LLM opinion and preference tendencies. It asks the same subjective question to a model N times, normalizes each answer to a canonical value, and tallies the distribution — revealing whether a model leans one way or consistently hedges.
 
@@ -34,7 +34,7 @@ All models run through [OpenRouter](https://openrouter.ai). Get an API key at op
 npm run cli run
 ```
 
-This runs every question against every model in `src/models.ts`, writing results to `results/`.
+This runs every question against every model in `src/models.ts`, writing results to `results/`. Already-completed model × question pairs are skipped automatically — rerun with `-- --force` to overwrite them.
 
 ### Single question evaluation
 
@@ -42,6 +42,15 @@ Run a single question by passing its ID:
 
 ```bash
 npm run cli run preference dinner-with-anyone
+```
+
+### Force re-run
+
+By default the CLI skips any model × question pair that already has results. Use `-- --force` (or `--overwrite`) to rerun everything:
+
+```bash
+npm run cli run -- --force
+npm run cli run preference cat-or-dog -- --force
 ```
 
 Or use the Mastra dev server UI to run individual workflow invocations:
@@ -118,7 +127,7 @@ Results are written to `results/<question-id>.json`:
 }
 ```
 
-Re-running updates the file in place, replacing the entry for each model.
+Re-running skips models that already have results. Use `-- --force` to overwrite existing entries.
 
 ## Project structure
 

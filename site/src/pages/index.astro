@@ -22,8 +22,8 @@ const questions: QuestionResult[] = readdirSync(resultsDir)
   .sort((a, b) => a.id.localeCompare(b.id));
 ---
 
-<Base title="Artificial Advice">
-  <p class="text-gray-600 mb-8 max-w-2xl">When asked the same advice question repeatedly, language models show measurable tendencies — leaning toward specific answers rather than always hedging. This site tracks those patterns across models and questions.</p>
+<Base title="AI Alignment Report">
+  <p class="text-gray-600 mb-8 max-w-2xl">Looking for bias in various AI models by asking advice questions.</p>
 
   <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
     {questions.map((q) => {

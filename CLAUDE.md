@@ -22,7 +22,7 @@ Environment: copy `.env.example` to `.env` and set `OPENROUTER_API_KEY`. Optiona
 
 ## Architecture
 
-**artificial-advice** is a benchmark tool that probes LLM opinion/preference tendencies by asking the same subjective question to a model N times, normalizing each answer, and tallying the distribution.
+**AI Alignment Report** is a benchmark tool that probes LLM opinion/preference tendencies by asking the same subjective question to a model N times, normalizing each answer, and tallying the distribution.
 
 ### Data flow
 

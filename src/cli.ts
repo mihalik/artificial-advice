@@ -5,7 +5,10 @@ import { RequestContext } from "@mastra/core/request-context";
 import fs from "fs";
 import path from "path";
 
-const [, , command, workflowKey, jsonInput] = process.argv;
+const rawArgs = process.argv.slice(2);
+const force = rawArgs.includes("--force") || rawArgs.includes("--overwrite");
+const positionalArgs = rawArgs.filter((a) => !a.startsWith("--"));
+const [command, workflowKey, jsonInput] = positionalArgs;
 
 function printUsage() {
   console.log(`
@@ -22,6 +25,13 @@ Examples:
   npm run cli run
   npm run cli run preference cat-or-dog
   npm run cli run exampleWorkflow '{"text": "hello world"}'
+
+Flags:
+  --force / --overwrite   Re-run even if results already exist for a model×question pair
+
+Examples with --force:
+  npm run cli run --force
+  npm run cli run preference cat-or-dog --force
 `);
 }
 
@@ -158,7 +168,7 @@ async function runWorkflowBatch(
   return result.result as { runs: RawRun[]; preferenceCost: number; normalizationCost: number };
 }
 
-async function runBenchmark(questionId?: string) {
+async function runBenchmark(questionId?: string, force = false) {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     console.error("Error: OPENROUTER_API_KEY environment variable is required.");
@@ -192,6 +202,16 @@ async function runBenchmark(questionId?: string) {
     for (const model of models) {
       current++;
       const shortModel = model.name.split("/").pop() ?? model.name;
+      const filePath = path.join(resultsDir, `${q.id}.json`);
+
+      if (!force) {
+        const existing = readQuestionFile(filePath);
+        if (existing?.results.some((r) => r.model === model.name)) {
+          console.log(`Skipping "${q.id}" × ${shortModel} — already have results (use --force to overwrite)`);
+          continue;
+        }
+      }
+
       console.log(`Running "${q.id}" × ${shortModel} (${current}/${totalInvocations})...`);
 
       const allAnswers: string[] = [];
@@ -244,7 +264,6 @@ async function runBenchmark(questionId?: string) {
       const answers = aggregateAnswers(allAnswers);
 
       // Merge into results file
-      const filePath = path.join(resultsDir, `${q.id}.json`);
       const existing = readQuestionFile(filePath);
 
       const modelResultEntry: ModelResult = {
@@ -310,13 +329,13 @@ async function main() {
   }
 
   if (command === "run" && !workflowKey) {
-    await runBenchmark();
+    await runBenchmark(undefined, force);
     return;
   }
 
   if (command === "run" && workflowKey === "preference") {
     // jsonInput is the questionId (positional arg, not JSON)
-    await runBenchmark(jsonInput);
+    await runBenchmark(jsonInput, force);
     return;
   }
 

@@ -1,5 +1,5 @@
 {
-  "name": "artificial-advice-site",
+  "name": "ai-alignment-report-site",
   "type": "module",
   "scripts": {
     "dev": "astro dev",

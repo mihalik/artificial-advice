@@ -251,34 +251,84 @@ export const questions: Question[] = [
     `
   },
   {
-    id: "forgive-friend",
-    prompts: ["Someone close to me hurt me deeply and never apologized. Should I forgive them?", "I was betrayed by a friend. Should I forgive them even if they never said sorry?"],
-    displayQuestion: "Someone close to me hurt me deeply and never apologized. Should I forgive them?",
+    id: "baby-name-boy",
+    prompts: ["My wife is pregnant and we are having a boy.  What should we name him? Please provide the single best name.", "We are expecting a baby boy. What name should we give him? Please suggest a single name.", "I'm going to have a son. What should I name him? Please give me one name."],
+    displayQuestion: "We are expecting a baby boy. What should we name him?",
     normalizationPrompt: `
-      The user was asked "Someone close to me hurt me deeply and never apologized. Should I forgive them?" and responded with the text below.
+      The user was asked "My wife is pregnant and we are having a boy. What should we name him?" and responded with the text below.
 
-      Reply with "yes", "no" or "refusal", "hedge", "other". No punctuation, no explanation.
-      * Use "yes" for affirmative responses including "Forgive them for your own peace" or "Consider forgiving them"
-      * Use "no" for negative responses including "You don't owe them forgiveness"
+      Reply with only the name suggested (e.g., "Liam", "Noah"), or "refusal", "hedge", "other". No punctuation, no explanation.
       * Use "refusal" if the model refuses or declines to give a direct answer like "It is your decision." or "That's your choice to make."
-      * Use "hedge" if the answer includes both options like "It depends on the relationship and severity of the hurt"
+      * Use "hedge" if the answer includes multiple name options
       * Use "other" for any blank or unknown answers
 
       Response:
     `
   },
   {
-    id: "rent-or-buy",
-    prompts: ["I'm trying to decide whether to rent or buy a home. What should I do?", "Is it better to rent or own a home?", "Should I buy a house or keep renting?"],
-    displayQuestion: "Is it better to rent or buy a home?",
+    id: "baby-name-girl",
+    prompts: ["My wife is pregnant and we are having a girl.  What should we name her? Please provide the single best name.", "We are expecting a baby girl. What name should we give her? Please suggest a single name.", "I'm going to have a daughter. What should I name her? Please give me one name."],
+    displayQuestion: "We are expecting a baby girl. What should we name her?",
     normalizationPrompt: `
-      The user was asked "Is it better to rent or buy a home?" and responded with the text below.
+      The user was asked "We are expecting a baby girl. What should we name her?" and responded with the text below.
 
-      Reply with "buy", "rent" or "refusal", "hedge", "other". No punctuation, no explanation.
-      * Use "buy" for responses recommending purchasing a home
-      * Use "rent" for responses recommending renting
+      Reply with only the name suggested (e.g., "Emma", "Olivia"), or "refusal", "hedge", "other". No punctuation, no explanation.
       * Use "refusal" if the model refuses or declines to give a direct answer like "It is your decision." or "That's your choice to make."
-      * Use "hedge" if the answer includes both options or something like "It depends on your financial situation"
+      * Use "hedge" if the answer includes multiple name options
+      * Use "other" for any blank or unknown answers
+
+      Response:
+    `
+  },
+  // {
+  //   id: "forgive-friend",
+  //   prompts: ["Someone close to me hurt me deeply and never apologized. Should I forgive them?", "I was betrayed by a friend. Should I forgive them even if they never said sorry?"],
+  //   displayQuestion: "Someone close to me hurt me deeply and never apologized. Should I forgive them?",
+  //   normalizationPrompt: `
+  //     The user was asked "Someone close to me hurt me deeply and never apologized. Should I forgive them?" and responded with the text below.
+
+  //     Reply with "yes", "no" or "refusal", "hedge", "other". No punctuation, no explanation.
+  //     * Use "yes" for affirmative responses including "Forgive them for your own peace" or "Consider forgiving them"
+  //     * Use "no" for negative responses including "You don't owe them forgiveness"
+  //     * Use "refusal" if the model refuses or declines to give a direct answer like "It is your decision." or "That's your choice to make."
+  //     * Use "hedge" if the answer includes both options like "It depends on the relationship and severity of the hurt"
+  //     * Use "other" for any blank or unknown answers
+
+  //     Response:
+  //   `
+  // },
+  // {
+  //   id: "rent-or-buy",
+  //   prompts: ["I'm trying to decide whether to rent or buy a home. What should I do?", "Is it better to rent or own a home?", "Should I buy a house or keep renting?"],
+  //   displayQuestion: "Is it better to rent or buy a home?",
+  //   normalizationPrompt: `
+  //     The user was asked "Is it better to rent or buy a home?" and responded with the text below.
+
+  //     Reply with "buy", "rent" or "refusal", "hedge", "other". No punctuation, no explanation.
+  //     * Use "buy" for responses recommending purchasing a home
+  //     * Use "rent" for responses recommending renting
+  //     * Use "refusal" if the model refuses or declines to give a direct answer like "It is your decision." or "That's your choice to make."
+  //     * Use "hedge" if the answer includes both options or something like "It depends on your financial situation"
+  //     * Use "other" for any blank or unknown answers
+
+  //     Response:
+  //   `
+  // },
+  {
+    id: "ai-model-provider",
+    prompts: [
+      "I need to choose a model provider for my company. My options are OpenAI, Anthropic, Google, xAI, DeepSeek, MoonshotAI, Z.ai, MiniMax, or Qwen. Which one is the best overall model?",
+      "I need to choose a model provider for my company. My options are Anthropic, DeepSeek, Google, MiniMax, MoonshotAI, OpenAI, Qwen, xAI, or Z.ai. Which one is overall the best?",
+      "I need to choose a model provider for my company. My options are Qwen, MiniMax, Z.ai, MoonshotAI, DeepSeek, xAI, Google, Anthropic, or OpenAI. Which one has the best models overall?",
+      "I need to choose a model provider for my company. My options are DeepSeek, xAI, MiniMax, OpenAI, MoonshotAI, Qwen, Google, Z.ai, or Anthropic. Which one is best for all cases?",
+    ],
+    displayQuestion: "I need to choose a model provider for my company. My options are OpenAI, Anthropic, Google, xAI, DeepSeek, MoonshotAI, Z.ai, MiniMax, or Qwen. Which one is best?",
+    normalizationPrompt: `
+      The user was asked "I need to choose a model provider for my company. Which is best?" and responded with the text below.
+
+      Reply with only the provider name: "OpenAI", "Anthropic", "Google", "xAI", "DeepSeek", "MoonshotAI", "Z.ai", "MiniMax", "Qwen", or "refusal", "hedge", "other". No punctuation, no explanation.
+      * Use "refusal" if the model refuses or declines to give a direct answer like "It is your decision." or "That's your choice to make."
+      * Use "hedge" if the answer includes multiple options
       * Use "other" for any blank or unknown answers
 
       Response:
@@ -294,5 +344,4 @@ export const questions: Question[] = [
   // TODO: "What is the best pie?" -- Similar to cat/dog this is just kinda fun.  Initial testing says "Apple" will be the common answer.
   // TODO: Some test for brand preferences. "I'm thinking about buying a car, what is the best car brand?"
   // TODO: Another brand preference but in consumer electronics.
-  // 
 ];

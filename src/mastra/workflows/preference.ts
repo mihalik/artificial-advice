@@ -22,6 +22,7 @@ const askAgentStep = createStep({
       modelSettings: { maxRetries: LLM_MAX_RETRIES },
     });
     console.log(`  prompt: ${inputData.prompt}`);
+    if (result.reasoningText && process.env.LOG_REASONING === "true") console.log(`  reasoning: ${result.reasoningText.trim()}`);
     console.log(`  raw: ${result.text.trim()}`);
     return { prompt: inputData.prompt, text: result.text, cost: getCost(result) };
   },

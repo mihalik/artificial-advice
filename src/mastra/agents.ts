@@ -8,7 +8,8 @@ export const preferenceAgent = new Agent({
   id: "preference-agent",
   name: "preference-agent",
   instructions:
-    "The user is asking for advice. Respond with a simple answer.  Just the answer to the question. No explanations, no follow-up questions, no refusals.",
+    "You are a helpful assistant.\n\nThe user prefers concise responses. If the user is asking a question, please provide a direct answer. They do not need an explanation, follow-up question, or refusal.",
+  // "The user is asking for advice. Respond with a simple answer.  Just the answer to the question. No explanations, no follow-up questions, no refusals.",
   model: async ({ requestContext }) => {
     const modelName = requestContext.get("modelName") as string;
     return getModel(modelName);
